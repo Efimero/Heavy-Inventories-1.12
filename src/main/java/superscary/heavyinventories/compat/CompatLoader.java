@@ -13,6 +13,8 @@ package superscary.heavyinventories.compat;
 public class CompatLoader
 {
 
+	// TODO: FINISH COMPATABILITY LOADER
+
 	/**
 	 * This class will be used for default implemented mods to calculate weights of inventories
 	 * such as Tinkers' Construct, Applied Energistics 2, and such.

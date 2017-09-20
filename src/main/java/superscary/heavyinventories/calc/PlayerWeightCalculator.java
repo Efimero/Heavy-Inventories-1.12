@@ -22,6 +22,7 @@ public class PlayerWeightCalculator
 {
 
 	/**
+	 * TODO: FIX ERROR WHEN GETTING WEIGHT FROM CUSTOM CONFIG
 	 * Calculates the weight of the player's entire inventory
 	 * @param player the player to weigh
 	 * @return the weight of the player

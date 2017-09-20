@@ -17,51 +17,11 @@ import superscary.heavyinventories.configs.reader.ConfigReader;
 public class CustomConfigLoader
 {
 
+	// TODO: Honestly I cant remember what I was going for here other than to get the weight of a custom config item
+
 	public static double getItemWeight(String modid, Item item)
 	{
 		return ConfigReader.getConfig(modid).get(Configuration.CATEGORY_GENERAL, item.getUnlocalizedName().substring(5), 0.5).getDouble();
 	}
-
-	/*public static double getBlockWeight(String modid, Block block)
-	{
-		*ArrayList<HashMap<Block, Double>> theList = blockWeightsList.get(modid);
-		for (HashMap<Block, Double> map : theList)
-		{
-			if (map.containsKey(block))
-			{
-				return map.get(block).doubleValue();
-			}
-		}
-
-		return ConfigReader.getConfig(modid).get(Configuration.CATEGORY_GENERAL, block.getUnlocalizedName().substring(5), 0.5).getDouble();
-
-	}*/
-
-	/*public static void putItem(String modid, Item item, double weight)
-	{
-		HashMap<Item, Double> hashMap = new HashMap<>();
-		hashMap.put(item, weight);
-
-		ArrayList<HashMap<Item, Double>> arrayList = new ArrayList<>();
-		arrayList.add(hashMap);
-
-		itemWeightsList.put(modid, arrayList);
-	}
-
-	public static void putBlock(String modid, Block block, double weight)
-	{
-		HashMap<Block, Double> hashMap = new HashMap<>();
-		hashMap.put(block, weight);
-
-		ArrayList<HashMap<Block, Double>> arrayList = new ArrayList<>();
-		arrayList.add(hashMap);
-
-		blockWeightsList.put(modid, arrayList);
-	}
-
-	public static void readItems()
-	{
-
-	}*/
 
 }
