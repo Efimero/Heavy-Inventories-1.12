@@ -15,6 +15,7 @@ import superscary.heavyinventories.configs.HeavyInventoriesConfig;
 public class Weight implements IWeighable
 {
 
+	//TODO: This sets the players max weight which needs to be able to change. Change does not apply when the player joins the server again.
 	private double weight = 0, maxWeight = HeavyInventoriesConfig.maxCarryWeight;
 	private double speed = 0, maxSpeed = 1;
 	private double stamina = 100, maxStamina = 100;

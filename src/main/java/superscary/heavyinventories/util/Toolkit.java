@@ -1,7 +1,9 @@
 package superscary.heavyinventories.util;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import superscary.heavyinventories.configs.HeavyInventoriesConfig;
@@ -20,6 +22,21 @@ public class Toolkit
 {
 
 	public static final String SETUP = HeavyInventoriesConfig.SETUP;
+
+	public static final String DATA_MAXWEIGHT = "maxWeight";
+
+	public static void saveDataToPlayer(EntityPlayer player, String dataName, float data)
+	{
+		NBTTagCompound compound = new NBTTagCompound();
+		compound.setFloat(dataName, data);
+		player.writeToNBT(compound);
+	}
+
+	public static float getDataFromPlayer(EntityPlayer player, String dataName)
+	{
+		NBTTagCompound compound = player.getEntityData();
+		return compound.getFloat(dataName);
+	}
 
 	public static String getModNameFromBlock(Block block)
 	{

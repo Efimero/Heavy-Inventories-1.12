@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -466,6 +467,33 @@ public class ClientEventHandler
 			weighable.setMaxWeight(HeavyInventoriesConfig.maxCarryWeight);
 		}
 
+	}
+
+	@SubscribeEvent
+	public void playerJoin(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event)
+	{
+		EntityPlayer player = event.player;
+		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
+		weighable.setMaxWeight(Toolkit.getDataFromPlayer(player, Toolkit.DATA_MAXWEIGHT));
+	}
+
+	@SubscribeEvent
+	public void playerLeave(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent event)
+	{
+		EntityPlayer player = event.player;
+		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
+		weighable.setMaxWeight(weighable.getMaxWeight());
+		Toolkit.saveDataToPlayer(player, Toolkit.DATA_MAXWEIGHT, (float) weighable.getMaxWeight());
+	}
+
+	@SubscribeEvent
+	public void newMaxWeightFinder(EntityEvent.EntityConstructing event)
+	{
+		if (event.getEntity() instanceof EntityPlayer)
+		{
+			EntityPlayer player = (EntityPlayer) event.getEntity();
+
+		}
 	}
 
 }
