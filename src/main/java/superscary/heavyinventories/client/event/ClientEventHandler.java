@@ -54,10 +54,10 @@ public class ClientEventHandler
 			ItemStack stack = event.getItemStack();
 			if (stack != null)
 			{
-				//TODO: FIX - The itemstack is returning null on initialization
 				if (stack.getItem().getRegistryName().toString().split(":")[0].equalsIgnoreCase("minecraft"))
 				{
 					double weight = PlayerWeightCalculator.getWeight(stack);
+					event.getToolTip().add("");
 					event.getToolTip().add(form(weight));
 					if (stack.getCount() > 1)
 					{
@@ -83,14 +83,12 @@ public class ClientEventHandler
 					/**
 					 * Custom reader
 					 */
-					//System.out.println(Toolkit.getModNameFromItem(stack.getItem()));
-					//System.out.println(ConfigReader.getLoadedMods());
 					if (ConfigReader.getLoadedMods().contains(Toolkit.getModNameFromItem(stack.getItem()) + ".cfg"))
 					{
 						String modid = Toolkit.getModNameFromItem(stack.getItem());
-						//System.out.println("Config Reader contained: " + modid);
 
 						double weight = CustomConfigLoader.getItemWeight(modid, stack.getItem());
+						event.getToolTip().add("");
 						event.getToolTip().add(form(weight));
 						if (stack.getCount() > 1)
 						{
@@ -116,11 +114,20 @@ public class ClientEventHandler
 		}
 	}
 
+	/**
+	 * Checks if either shift keys are pressed (for tooltips)
+	 * @return
+	 */
 	private boolean tooltipKeyCheck()
 	{
 		return Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
 	}
 
+	/**
+	 * Default text form for tooltips
+	 * @param weight
+	 * @return
+	 */
 	private String form(double weight)
 	{
 		return ChatFormatting.BOLD + "" + ChatFormatting.WHITE + "Weight: " + weight + " Stone";

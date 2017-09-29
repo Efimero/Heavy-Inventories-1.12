@@ -45,7 +45,7 @@ public abstract class CommonProxy
 
 	public void init()
 	{
-		//WeighablePlayer.init();
+
 	}
 
 	public void postInit()

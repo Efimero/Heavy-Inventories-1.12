@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import superscary.heavyinventories.configs.weights.CustomConfigLoader;
 import superscary.heavyinventories.configs.weights.MinecraftConfig;
+import superscary.heavyinventories.util.Toolkit;
 
 /**
  * Copyright (c) 2017 by SuperScary(ERBF) http://codesynced.com
@@ -22,7 +23,6 @@ public class PlayerWeightCalculator
 {
 
 	/**
-	 * TODO: FIX ERROR WHEN GETTING WEIGHT FROM CUSTOM CONFIG
 	 * Calculates the weight of the player's entire inventory
 	 * @param player the player to weigh
 	 * @return the weight of the player
@@ -36,14 +36,14 @@ public class PlayerWeightCalculator
 			Item item = stack.getItem();
 			if (stack != null)
 			{
-				//if (Toolkit.getModNameFromItem(stack.getItem()).equalsIgnoreCase("minecraft"))
-				//{
+				if (Toolkit.getModNameFromItem(stack.getItem()).equalsIgnoreCase("minecraft"))
+				{
 					weight += (getWeight(stack) * stack.getCount());
-				//}
-				/*else
+				}
+				else
 				{
 					weight += (getWeight(Toolkit.getModNameFromItem(stack.getItem()), stack.getItem()) * stack.getCount());
-				}*/
+				}
 			}
 		}
 		return weight;

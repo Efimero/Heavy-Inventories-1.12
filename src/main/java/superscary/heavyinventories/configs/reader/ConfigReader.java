@@ -3,7 +3,7 @@ package superscary.heavyinventories.configs.reader;
 import net.minecraftforge.common.config.Configuration;
 import superscary.heavyinventories.HeavyInventories;
 import superscary.heavyinventories.configs.HeavyInventoriesConfig;
-import superscary.heavyinventories.configs.weights.MinecraftConfig;
+import superscary.heavyinventories.util.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,7 +26,6 @@ public class ConfigReader
 	 * This is used to read through this mods config directory to find any mods that have integration with this mod.
 	 */
 
-	private static File directory = new File(MinecraftConfig.getConfig().getConfigFile().getAbsolutePath() + "/Weights");
 	private static ArrayList<String> loadedMods = new ArrayList<>();
 	private static ArrayList<Configuration> configurations = new ArrayList<>();
 	private static HashMap<String, Configuration> configs = new HashMap<>();
@@ -41,7 +40,7 @@ public class ConfigReader
 			{
 				if (!s.equals("Minecraft.cfg"))
 				{
-					System.out.println("Found: " + s + " in the loading directory! Loading...");
+					Logger.info("Found: " + s + " in the loading directory! Loading...");
 					File file = new File(DIR + s);
 					if (file != null) System.out.println("Found: " + file.getAbsolutePath());
 					loadedMods.add(s);
@@ -61,7 +60,7 @@ public class ConfigReader
 			Configuration theConfig = new Configuration(new File(DIR + s));
 			configurations.add(theConfig);
 			configs.put(s, theConfig);
-			System.out.println("Read: " + s + " into memory.");
+			Logger.info("Read: " + s + " into memory.");
 		}
 		addItems();
 	}
@@ -71,7 +70,7 @@ public class ConfigReader
 		for (String mod : loadedMods)
 		{
 			configs.get(mod).load();
-			System.out.println("Loaded: " + mod);
+			Logger.info("Loaded: " + mod);
 		}
 	}
 

@@ -14,6 +14,7 @@ import superscary.heavyinventories.configs.HeavyInventoriesConfig;
 import superscary.heavyinventories.configs.reader.ConfigReader;
 import superscary.heavyinventories.configs.weights.MinecraftConfig;
 import superscary.heavyinventories.util.Constants;
+import superscary.heavyinventories.util.Logger;
 import superscary.supercore.info.Generator;
 
 import java.io.File;
@@ -38,6 +39,8 @@ public class HeavyInventories
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+        Logger.setLogger(event.getModLog());
+
         Generator.Info.create(Constants.class, event);
         MinecraftConfig.init(event.getModConfigurationDirectory());
         HeavyInventoriesConfig.init(event.getModConfigurationDirectory());

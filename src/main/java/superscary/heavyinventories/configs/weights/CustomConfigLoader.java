@@ -17,8 +17,12 @@ import superscary.heavyinventories.configs.reader.ConfigReader;
 public class CustomConfigLoader
 {
 
-	// TODO: Items are returning the default weight that are non-minecraft items.
-
+	/**
+	 * Returns the weight of the item from the custom configs
+	 * @param modid
+	 * @param item
+	 * @return
+	 */
 	public static double getItemWeight(String modid, Item item)
 	{
 		return ConfigReader.getConfig(modid + ".cfg").get(Configuration.CATEGORY_GENERAL, item.getRegistryName().toString().split(":")[1], 0.5).getDouble();
