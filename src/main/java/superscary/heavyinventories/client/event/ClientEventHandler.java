@@ -4,12 +4,10 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -21,6 +19,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import superscary.heavyinventories.calc.PlayerWeightCalculator;
 import superscary.heavyinventories.client.gui.InventoryWeightText;
+import superscary.heavyinventories.common.capability.offsets.IOffset;
+import superscary.heavyinventories.common.capability.offsets.OffsetProvider;
 import superscary.heavyinventories.common.capability.weight.IWeighable;
 import superscary.heavyinventories.common.capability.weight.WeightProvider;
 import superscary.heavyinventories.configs.HeavyInventoriesConfig;
@@ -55,10 +55,10 @@ public class ClientEventHandler
 			if (stack != null)
 			{
 				//TODO: FIX - The itemstack is returning null on initialization
-				if (stack.getItem().getUnlocalizedName().split(":")[0].equalsIgnoreCase("minecraft"))
+				if (stack.getItem().getRegistryName().toString().split(":")[0].equalsIgnoreCase("minecraft"))
 				{
 					double weight = PlayerWeightCalculator.getWeight(stack);
-					event.getToolTip().add(ChatFormatting.BOLD + "" + ChatFormatting.WHITE + "Weight: " + weight + " Stone");
+					event.getToolTip().add(form(weight));
 					if (stack.getCount() > 1)
 					{
 						event.getToolTip().add(I18n.format("hi.gui.weight") + " " + (weight * stack.getCount()) + " Stone");
@@ -66,7 +66,7 @@ public class ClientEventHandler
 
 					if (Minecraft.getMinecraft().currentScreen != null)
 					{
-						if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+						if (tooltipKeyCheck())
 						{
 							event.getToolTip()
 								 .add(I18n.format("hi.gui.maxStackWeight", stack.getMaxStackSize()) + " " + (weight * stack
@@ -80,60 +80,50 @@ public class ClientEventHandler
 				}
 				else
 				{
+					/**
+					 * Custom reader
+					 */
+					//System.out.println(Toolkit.getModNameFromItem(stack.getItem()));
+					//System.out.println(ConfigReader.getLoadedMods());
 					if (ConfigReader.getLoadedMods().contains(Toolkit.getModNameFromItem(stack.getItem()) + ".cfg"))
 					{
 						String modid = Toolkit.getModNameFromItem(stack.getItem());
+						//System.out.println("Config Reader contained: " + modid);
 
-						if (stack.getItem() instanceof ItemBlock)
+						double weight = CustomConfigLoader.getItemWeight(modid, stack.getItem());
+						event.getToolTip().add(form(weight));
+						if (stack.getCount() > 1)
 						{
-							double weight = CustomConfigLoader.getItemWeight(modid, stack.getItem());
-							event.getToolTip().add(ChatFormatting.BOLD + "" + ChatFormatting.WHITE + "Weight: " + weight + " Stone");
-							if (stack.getCount() > 1)
-							{
-								event.getToolTip().add(I18n.format("hi.gui.weight") + " " + (weight * stack.getCount()) + " Stone");
-							}
-
-							if (Minecraft.getMinecraft().currentScreen != null)
-							{
-								if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-								{
-									event.getToolTip()
-										 .add(I18n.format("hi.gui.maxStackWeight", stack.getMaxStackSize()) + " " + (weight * stack
-												 .getMaxStackSize()) + " Stone");
-								}
-								else
-								{
-									event.getToolTip().add(I18n.format("hi.gui.shift", EnumColor.YELLOW + "SHIFT" + EnumColor.GREY));
-								}
-							}
+							event.getToolTip().add(I18n.format("hi.gui.weight") + " " + (weight * stack.getCount()) + " Stone");
 						}
-						else
-						{
-							double weight = CustomConfigLoader.getItemWeight(modid, stack.getItem());
-							event.getToolTip().add(ChatFormatting.BOLD + "" + ChatFormatting.WHITE + "Weight: " + weight + " Stone");
-							if (stack.getCount() > 1)
-							{
-								event.getToolTip().add(I18n.format("hi.gui.weight") + " " + (weight * stack.getCount()) + " Stone");
-							}
 
-							if (Minecraft.getMinecraft().currentScreen != null)
+						if (Minecraft.getMinecraft().currentScreen != null)
+						{
+							if (tooltipKeyCheck())
 							{
-								if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-								{
-									event.getToolTip()
-										 .add(I18n.format("hi.gui.maxStackWeight", stack.getMaxStackSize()) + " " + (weight * stack
-												 .getMaxStackSize()) + " Stone");
-								}
-								else
-								{
-									event.getToolTip().add(I18n.format("hi.gui.shift", EnumColor.YELLOW + "SHIFT" + EnumColor.GREY));
-								}
+								event.getToolTip()
+									 .add(I18n.format("hi.gui.maxStackWeight", stack.getMaxStackSize()) + " " + (weight * stack
+											 .getMaxStackSize()) + " Stone");
+							}
+							else
+							{
+								event.getToolTip().add(I18n.format("hi.gui.shift", EnumColor.YELLOW + "SHIFT" + EnumColor.GREY));
 							}
 						}
 					}
 				}
 			}
 		}
+	}
+
+	private boolean tooltipKeyCheck()
+	{
+		return Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
+	}
+
+	private String form(double weight)
+	{
+		return ChatFormatting.BOLD + "" + ChatFormatting.WHITE + "Weight: " + weight + " Stone";
 	}
 
 	private boolean encumberedMessage = false;
@@ -305,8 +295,11 @@ public class ClientEventHandler
 		EntityPlayer player = event.getEntityPlayer();
 		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
 		IWeighable weighableOld = event.getOriginal().getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
+		IOffset offset = player.getCapability(OffsetProvider.OFFSET_CAPABILITY, null);
+		IOffset offsetOld = event.getOriginal().getCapability(OffsetProvider.OFFSET_CAPABILITY, null);
 
 		weighable.setWeight(weighableOld.getWeight());
+		offset.setOffset(offsetOld.getOffset());
 	}
 
 	/**
@@ -470,30 +463,21 @@ public class ClientEventHandler
 	}
 
 	@SubscribeEvent
-	public void playerJoin(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event)
+	public void getPlayerWeightOffset(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event)
 	{
 		EntityPlayer player = event.player;
+		IOffset offset = player.getCapability(OffsetProvider.OFFSET_CAPABILITY, null);
 		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
-		weighable.setMaxWeight(Toolkit.getDataFromPlayer(player, Toolkit.DATA_MAXWEIGHT));
+
+		weighable.setMaxWeight(HeavyInventoriesConfig.maxCarryWeight + offset.getOffset());
 	}
 
 	@SubscribeEvent
-	public void playerLeave(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent event)
+	public void savePlayerWeightOffset(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent event)
 	{
 		EntityPlayer player = event.player;
-		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
-		weighable.setMaxWeight(weighable.getMaxWeight());
-		Toolkit.saveDataToPlayer(player, Toolkit.DATA_MAXWEIGHT, (float) weighable.getMaxWeight());
-	}
-
-	@SubscribeEvent
-	public void newMaxWeightFinder(EntityEvent.EntityConstructing event)
-	{
-		if (event.getEntity() instanceof EntityPlayer)
-		{
-			EntityPlayer player = (EntityPlayer) event.getEntity();
-
-		}
+		IOffset offset = player.getCapability(OffsetProvider.OFFSET_CAPABILITY, null);
+		offset.setOffset(offset.getOffset());
 	}
 
 }

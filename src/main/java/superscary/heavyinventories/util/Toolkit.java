@@ -40,12 +40,12 @@ public class Toolkit
 
 	public static String getModNameFromBlock(Block block)
 	{
-		String find = block.getUnlocalizedName().substring(5);
+		String find = block.getRegistryName().toString().split(":")[0];
 		for (ModContainer mod : Loader.instance().getModList())
 		{
 			if (mod.getModId().equalsIgnoreCase(find))
 			{
-				return mod.getModId();
+				return mod.getName().replaceAll("\\s+", "");
 			}
 		}
 		return null;
@@ -53,12 +53,12 @@ public class Toolkit
 
 	public static String getModNameFromItem(Item item)
 	{
-		String find = item.getUnlocalizedName().substring(5);
+		String find = item.getRegistryName().toString().split(":")[0];
 		for (ModContainer mod : Loader.instance().getModList())
 		{
 			if (mod.getModId().equalsIgnoreCase(find))
 			{
-				return mod.getModId();
+				return mod.getName().replaceAll("\\s+", "");
 			}
 		}
 

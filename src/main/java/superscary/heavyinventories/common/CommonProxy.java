@@ -5,6 +5,9 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import superscary.heavyinventories.common.capability.CapabilityHandler;
+import superscary.heavyinventories.common.capability.offsets.IOffset;
+import superscary.heavyinventories.common.capability.offsets.OffsetStorage;
+import superscary.heavyinventories.common.capability.offsets.WeightOffset;
 import superscary.heavyinventories.common.capability.weight.IWeighable;
 import superscary.heavyinventories.common.capability.weight.Weight;
 import superscary.heavyinventories.common.capability.weight.WeightStorage;
@@ -52,7 +55,8 @@ public abstract class CommonProxy
 
 	public void registerCapability()
 	{
-		CapabilityManager.INSTANCE.register(IWeighable.class, new WeightStorage(), Weight.class);
+		CapabilityManager.INSTANCE.register(IWeighable.class, new WeightStorage(), Weight::new);
+		CapabilityManager.INSTANCE.register(IOffset.class, new OffsetStorage(), WeightOffset::new);
 	}
 
 	public void registerNetwork()
