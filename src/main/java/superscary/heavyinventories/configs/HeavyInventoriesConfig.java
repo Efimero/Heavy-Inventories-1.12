@@ -37,6 +37,11 @@ public class HeavyInventoriesConfig
 	public static boolean autoGenerateWeightConfigFiles;
 	public static boolean pumpingIron;
 	public static float pumpingIronWeightIncrease;
+	public static boolean canEnderPearlTeleport;
+	public static boolean canTeleportToEnd;
+	public static boolean canTeleportToNether;
+	public static boolean canTeleport;
+	public static boolean canFly;
 
 	public static double maxCarryWeight;
 
@@ -66,6 +71,11 @@ public class HeavyInventoriesConfig
 		autoGenerateWeightConfigFiles = Toolkit.getBoolean("autoGenerateWeightConfigFiles", false);
 		pumpingIron = Toolkit.getBoolean("pumpingIron", true);
 		pumpingIronWeightIncrease = Toolkit.getFloat("pumpingIronWeightIncrease", (float) 0.5, 0, 10);
+		canEnderPearlTeleport = Toolkit.getBoolean("canEnderPearlTeleport", false);
+		canTeleportToEnd = Toolkit.getBoolean("canTeleportToEnd", false);
+		canTeleportToNether = Toolkit.getBoolean("canTeleportToNether", false);
+		canTeleport = Toolkit.getBoolean("canTeleport", false);
+		canFly = Toolkit.getBoolean("canFly", false);
 
 		String[] files = config.getStringList("Files", "Files", new String[] {"Minecraft.cfg"}, "The custom weight files for other mods. Seperate each with a comma.");
 

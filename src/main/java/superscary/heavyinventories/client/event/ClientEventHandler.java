@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -57,7 +58,6 @@ public class ClientEventHandler
 				if (stack.getItem().getRegistryName().toString().split(":")[0].equalsIgnoreCase("minecraft"))
 				{
 					double weight = PlayerWeightCalculator.getWeight(stack);
-					event.getToolTip().add("");
 					event.getToolTip().add(form(weight));
 					if (stack.getCount() > 1)
 					{
@@ -68,13 +68,11 @@ public class ClientEventHandler
 					{
 						if (tooltipKeyCheck())
 						{
-							event.getToolTip()
-								 .add(I18n.format("hi.gui.maxStackWeight", stack.getMaxStackSize()) + " " + (weight * stack
-										 .getMaxStackSize()) + " Stone");
+							addShiftTip(event, stack, weight);
 						}
 						else
 						{
-							event.getToolTip().add(I18n.format("hi.gui.shift", EnumColor.YELLOW + "SHIFT" + EnumColor.GREY));
+							addNoShift(event);
 						}
 					}
 				}
@@ -88,7 +86,6 @@ public class ClientEventHandler
 						String modid = Toolkit.getModNameFromItem(stack.getItem());
 
 						double weight = CustomConfigLoader.getItemWeight(modid, stack.getItem());
-						event.getToolTip().add("");
 						event.getToolTip().add(form(weight));
 						if (stack.getCount() > 1)
 						{
@@ -99,19 +96,37 @@ public class ClientEventHandler
 						{
 							if (tooltipKeyCheck())
 							{
-								event.getToolTip()
-									 .add(I18n.format("hi.gui.maxStackWeight", stack.getMaxStackSize()) + " " + (weight * stack
-											 .getMaxStackSize()) + " Stone");
+								addShiftTip(event, stack, weight);
 							}
 							else
 							{
-								event.getToolTip().add(I18n.format("hi.gui.shift", EnumColor.YELLOW + "SHIFT" + EnumColor.GREY));
+								addNoShift(event);
 							}
 						}
 					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * Adds the tooltip to items when shift is being pressed
+	 * @param event
+	 * @param stack
+	 * @param weight
+	 */
+	private void addShiftTip(ItemTooltipEvent event, ItemStack stack, double weight)
+	{
+		event.getToolTip().add(I18n.format("hi.gui.maxStackWeight", stack.getMaxStackSize()) + " " + (weight * stack.getMaxStackSize()) + " Stone");
+	}
+
+	/**
+	 * Adds the tooltip to items when shift is not being pressed
+	 * @param event
+	 */
+	private void addNoShift(ItemTooltipEvent event)
+	{
+		event.getToolTip().add(I18n.format("hi.gui.shift", EnumColor.YELLOW + "SHIFT" + EnumColor.GREY));
 	}
 
 	/**
@@ -394,24 +409,71 @@ public class ClientEventHandler
 		return !weighable.isEncumbered() || !weighable.isOverEncumbered();
 	}
 
-	// TODO fix where the player teleports. It is supposed to teleport them half the distance (with an enderpearl)
-	/*@SubscribeEvent
+	/**
+	 * Removes the players ability to teleport with an ender pearl
+	 * @param event
+	 */
+	@SubscribeEvent
 	public void throwEnderPearl(EnderTeleportEvent event)
 	{
-		if (event.getEntityLiving() instanceof EntityPlayer)
+		if (!HeavyInventoriesConfig.canEnderPearlTeleport)
 		{
-			EntityPlayer player = (EntityPlayer) event.getEntity();
-			IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
-
-			if (weighable.isOverEncumbered() || weighable.isEncumbered())
+			if (event.getEntityLiving() instanceof EntityPlayer)
 			{
-				player.sendMessage(new TextComponentTranslation("hi.splash.noTeleport"));
-				event.setTargetX((player.getPosition().getX() - event.getTargetX()) / 2);
-				event.setTargetZ((player.getPosition().getZ() - event.getTargetZ()) / 2);
+				EntityPlayer player = (EntityPlayer) event.getEntity();
+				IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
+
+				if (weighable.isOverEncumbered() || weighable.isEncumbered())
+				{
+					player.sendMessage(new TextComponentTranslation("hi.splash.noTeleport"));
+					event.setTargetZ(player.posZ);
+					event.setTargetY(player.posY);
+					event.setTargetX(player.posX);
+					event.setAttackDamage(0f);
+				}
 			}
 		}
-	}*/
+	}
 
+	/**
+	 * Stops players from teleporting to different dimensions when over encumbered
+	 * TODO: Does not function correctly. Creates block errors in other dimensions.
+	 * @param event
+	 */
+	@SubscribeEvent
+	public void portalTeleport(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent event)
+	{
+		EntityPlayer player = event.player;
+		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
+		IOffset offset = player.getCapability(OffsetProvider.OFFSET_CAPABILITY, null);
+
+		if (weighable.isEncumbered() || weighable.isOverEncumbered())
+		{
+			if (HeavyInventoriesConfig.canTeleport)
+			{
+				if (!HeavyInventoriesConfig.canTeleportToNether)
+				{
+					if (event.toDim == -1)
+					{
+						player.changeDimension(event.fromDim);
+					}
+				}
+
+				if (!HeavyInventoriesConfig.canTeleportToEnd)
+				{
+					if (event.toDim == 1)
+					{
+						player.changeDimension(event.fromDim);
+					}
+				}
+			}
+			else
+			{
+				player.dimension = event.fromDim;
+			}
+		}
+
+	}
 
 	// TODO FIX: Creates loop on use of potion / doesn't affect max weight
 	private static boolean hasUsedStrengthPotion;
