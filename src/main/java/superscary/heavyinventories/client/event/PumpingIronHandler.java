@@ -7,6 +7,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import superscary.heavyinventories.common.capability.offsets.IOffset;
 import superscary.heavyinventories.common.capability.offsets.OffsetProvider;
+import superscary.heavyinventories.common.capability.weight.IWeighable;
+import superscary.heavyinventories.common.capability.weight.WeightProvider;
 import superscary.heavyinventories.configs.HeavyInventoriesConfig;
 
 /**
@@ -34,11 +36,17 @@ public class PumpingIronHandler
 	public void handleAnvilUse(AnvilRepairEvent event)
 	{
 		EntityPlayer player = event.getEntityPlayer();
-		/*IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
-		weighable.setMaxWeight(weighable.getMaxWeight() + HeavyInventoriesConfig.pumpingIronWeightIncrease);*/
+
 		IOffset offset = player.getCapability(OffsetProvider.OFFSET_CAPABILITY, null);
 
 		offset.setOffset(offset.getOffset() + HeavyInventoriesConfig.pumpingIronWeightIncrease);
+
+		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
+		if (player.getEntityData().hasKey("HIWeight"))
+		{
+			weighable.setMaxWeight(weighable.getMaxWeight() + HeavyInventoriesConfig.pumpingIronWeightIncrease);
+			player.getEntityData().setDouble("HIWeight", weighable.getMaxWeight() + offset.getOffset());
+		}
 	}
 
 	@SubscribeEvent

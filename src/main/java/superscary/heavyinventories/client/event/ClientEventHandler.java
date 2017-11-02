@@ -538,7 +538,14 @@ public class ClientEventHandler
 		IOffset offset = player.getCapability(OffsetProvider.OFFSET_CAPABILITY, null);
 		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
 
-		weighable.setMaxWeight(HeavyInventoriesConfig.maxCarryWeight + offset.getOffset());
+		if (player.getEntityData().hasKey("HIWeight"))
+		{
+			weighable.setMaxWeight(player.getEntityData().getDouble("HIWeight"));
+		}
+		else
+		{
+			player.getEntityData().setDouble("HIWeight", HeavyInventoriesConfig.maxCarryWeight);
+		}
 	}
 
 	@SubscribeEvent
@@ -546,7 +553,8 @@ public class ClientEventHandler
 	{
 		EntityPlayer player = event.player;
 		IOffset offset = player.getCapability(OffsetProvider.OFFSET_CAPABILITY, null);
-		offset.setOffset(offset.getOffset());
+		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
+		player.getEntityData().setDouble("HIWeight", weighable.getMaxWeight() + offset.getOffset());
 	}
 
 }
