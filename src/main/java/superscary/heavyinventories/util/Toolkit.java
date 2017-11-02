@@ -6,6 +6,8 @@ import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
+import superscary.heavyinventories.common.capability.weight.IWeighable;
+import superscary.heavyinventories.common.capability.weight.WeightProvider;
 import superscary.heavyinventories.configs.HeavyInventoriesConfig;
 
 /**
@@ -88,6 +90,26 @@ public class Toolkit
 	public static boolean getBoolean(String name, boolean defaultValue)
 	{
 		return getBoolean(name, SETUP, defaultValue);
+	}
+
+	public static void increasePlayerMaxWeight(EntityPlayer player, double value)
+	{
+		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
+
+		player.getEntityData().setDouble("HIWeight", weighable.getMaxWeight() + value);
+	}
+
+	public static void decreasePlayerMaxWeight(EntityPlayer player, double value)
+	{
+		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
+
+		player.getEntityData().setDouble("HIWeight", weighable.getMaxWeight() - value >= 0 ? weighable.getMaxWeight() - value : 0);
+	}
+
+	public static void setPlayerMaxCarryWeight(EntityPlayer player, double value)
+	{
+		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
+		player.getEntityData().setDouble("HIWeight", value);
 	}
 
 }

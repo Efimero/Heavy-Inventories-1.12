@@ -32,7 +32,6 @@ public class PumpingIronHandler
 		}
 	}
 
-	@SubscribeEvent
 	public void handleAnvilUse(AnvilRepairEvent event)
 	{
 		EntityPlayer player = event.getEntityPlayer();
@@ -45,7 +44,8 @@ public class PumpingIronHandler
 		if (player.getEntityData().hasKey("HIWeight"))
 		{
 			weighable.setMaxWeight(weighable.getMaxWeight() + HeavyInventoriesConfig.pumpingIronWeightIncrease);
-			player.getEntityData().setDouble("HIWeight", weighable.getMaxWeight() + offset.getOffset());
+			player.getEntityData().setDouble("HIWeight", weighable.getMaxWeight());
+			ClientEventHandler.playerWeight = weighable.getMaxWeight();
 		}
 	}
 

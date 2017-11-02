@@ -3,6 +3,7 @@ package superscary.heavyinventories.client.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import superscary.heavyinventories.client.event.ClientEventHandler;
 import superscary.heavyinventories.common.capability.offsets.IOffset;
 import superscary.heavyinventories.common.capability.offsets.OffsetProvider;
 import superscary.heavyinventories.common.capability.weight.IWeighable;
@@ -28,7 +29,7 @@ public class InventoryWeightText extends Gui
 		IWeighable weighable = minecraft.player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
 		IOffset offset = minecraft.player.getCapability(OffsetProvider.OFFSET_CAPABILITY, null);
 
-		double display = weighable.getMaxWeight() + offset.getOffset();
+		double display = ClientEventHandler.playerWeight;
 
 		ScaledResolution scaledResolution = new ScaledResolution(minecraft);
 
