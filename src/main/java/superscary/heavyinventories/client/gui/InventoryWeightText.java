@@ -10,7 +10,7 @@ import superscary.heavyinventories.common.capability.weight.IWeighable;
 import superscary.heavyinventories.common.capability.weight.WeightProvider;
 
 /**
- * Copyright (c) 2017 by SuperScary(ERBF) http://codesynced.com
+ * Copyright (c) 2018 by SuperScary(ERBF) http://codesynced.com
  * <p>
  * All rights reserved. No part of this software may be reproduced,
  * distributed, or transmitted in any form or by any means, including
@@ -29,7 +29,7 @@ public class InventoryWeightText extends Gui
 		IWeighable weighable = minecraft.player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
 		IOffset offset = minecraft.player.getCapability(OffsetProvider.OFFSET_CAPABILITY, null);
 
-		double display = ClientEventHandler.playerWeight;
+		double display = ClientEventHandler.getPlayerWeight();
 
 		ScaledResolution scaledResolution = new ScaledResolution(minecraft);
 
@@ -40,7 +40,6 @@ public class InventoryWeightText extends Gui
 		else if (minecraft.gameSettings.attackIndicator == 2)
 		{
 			minecraft.fontRenderer.drawString("" + weighable.getWeight() + "/" + display + label, scaledResolution.getScaledWidth() / 2 + 97, scaledResolution.getScaledHeight() - 30, Integer.parseInt("FFFFFF", 16), true);
-
 		}
 	}
 

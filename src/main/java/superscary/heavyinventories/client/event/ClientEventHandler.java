@@ -27,12 +27,13 @@ import superscary.heavyinventories.common.capability.weight.WeightProvider;
 import superscary.heavyinventories.configs.HeavyInventoriesConfig;
 import superscary.heavyinventories.configs.reader.ConfigReader;
 import superscary.heavyinventories.configs.weights.CustomConfigLoader;
+import superscary.heavyinventories.util.EnumTagID;
 import superscary.heavyinventories.util.Logger;
 import superscary.heavyinventories.util.Toolkit;
 import superscary.supercore.tools.EnumColor;
 
 /**
- * Copyright (c) 2017 by SuperScary(ERBF) http://codesynced.com
+ * Copyright (c) 2018 by SuperScary(ERBF) http://codesynced.com
  * <p>
  * All rights reserved. No part of this software may be reproduced,
  * distributed, or transmitted in any form or by any means, including
@@ -532,7 +533,15 @@ public class ClientEventHandler
 
 	}
 
-	public static double playerWeight;
+	/**
+	 * Variable used to display and save/modify the players weight
+	 */
+	private static double playerWeight;
+
+	/**
+	 * Loads the players weight when logged in
+	 * @param event
+	 */
 	@SubscribeEvent
 	public void getPlayerWeightOffset(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event)
 	{
@@ -540,25 +549,50 @@ public class ClientEventHandler
 		IOffset offset = player.getCapability(OffsetProvider.OFFSET_CAPABILITY, null);
 		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
 
-		if (player.getEntityData().hasKey("HIWeight"))
+		if (player.getEntityData().hasKey(EnumTagID.WEIGHT.getId()))
 		{
-			weighable.setMaxWeight(player.getEntityData().getDouble("HIWeight"));
+			Logger.info("Loading key: %s", EnumTagID.WEIGHT.getId());
+			weighable.setMaxWeight(player.getEntityData().getDouble(EnumTagID.WEIGHT.getId()));
 			Logger.info("Player %s weight = %s", player.getDisplayNameString(), weighable.getMaxWeight());
 		}
 		else
 		{
-			player.getEntityData().setDouble("HIWeight", HeavyInventoriesConfig.maxCarryWeight);
+			player.getEntityData().setDouble(EnumTagID.WEIGHT.getId(), HeavyInventoriesConfig.maxCarryWeight);
 			weighable.setMaxWeight(700.0D);
 		}
 		playerWeight = weighable.getMaxWeight();
 	}
 
+	/**
+	 * Getter for the player's weight
+	 * @return
+	 */
+	public static double getPlayerWeight()
+	{
+		return playerWeight;
+	}
+
+	public static double addPlayerWeight(double add)
+	{
+		return playerWeight += add;
+	}
+
+	public static void setPlayerWeight(double set)
+	{
+		playerWeight = set;
+	}
+
+	/**
+	 * Saves the players weight when the player logs out
+	 * @param event
+	 */
 	@SubscribeEvent
 	public void savePlayerWeightOffset(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent event)
 	{
 		EntityPlayer player = event.player;
 		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
-		player.getEntityData().setDouble("HIWeight", weighable.getMaxWeight());
+		Logger.info("Unloading key: %s", EnumTagID.WEIGHT.getId());
+		player.getEntityData().setDouble(EnumTagID.WEIGHT.getId(), weighable.getMaxWeight());
 		Logger.info("Player %s weight = %s", player.getDisplayNameString(), weighable.getMaxWeight());
 	}
 

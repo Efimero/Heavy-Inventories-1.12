@@ -1,4 +1,4 @@
-package superscary.heavyinventories.common.event;
+package superscary.heavyinventories.util;
 
 /**
  * Copyright (c) 2018 by SuperScary(ERBF) http://codesynced.com
@@ -10,7 +10,25 @@ package superscary.heavyinventories.common.event;
  * the case of brief quotations embodied in critical reviews and
  * certain other noncommercial uses permitted by copyright law.
  */
-public class CommonEventHandler
+public enum EnumTagID
 {
+
+	WEIGHT("HIWeight");
+
+	private String id;
+	EnumTagID(String id)
+	{
+		this.id = id;
+	}
+
+	public String getId()
+	{
+		return id;
+	}
+
+	public static String getTagID(EnumTagID enumTagID)
+	{
+		return enumTagID.getId();
+	}
 
 }

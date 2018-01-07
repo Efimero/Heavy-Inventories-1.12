@@ -17,7 +17,7 @@ import java.util.List;
 import static superscary.heavyinventories.util.Constants.MODID;
 
 /**
- * Copyright (c) 2017 by SuperScary(ERBF) http://codesynced.com
+ * Copyright (c) 2018 by SuperScary(ERBF) http://codesynced.com
  * <p>
  * All rights reserved. No part of this software may be reproduced,
  * distributed, or transmitted in any form or by any means, including
