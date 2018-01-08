@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import superscary.heavyinventories.common.capability.weight.IWeighable;
@@ -110,6 +111,31 @@ public class Toolkit
 	{
 		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
 		player.getEntityData().setDouble("HIWeight", value);
+	}
+
+	/**
+	 * Plays a sound at the player (reference: http://www.minecraftforum.net/forums/mapping-and-modding-java-edition/mapping-and-modding-tutorials/2567682-all-playsound-names-1-9-1-11-updated)
+	 * @param player
+	 * @param soundID
+	 */
+	public static void playSoundAtPlayer(EntityPlayer player, int soundID, float volume, float pitch)
+	{
+		player.playSound(SoundEvent.REGISTRY.getObjectById(soundID), volume, pitch);
+	}
+
+	public static double roundDouble(double value, int places)
+	{
+		if (places == 0) places = 1;
+
+		long factor = (long) Math.pow(10, places);
+		value *= factor;
+		long temp = Math.round(value);
+		return (double) temp / factor;
+	}
+
+	public static double roundDouble(double value)
+	{
+		return roundDouble(value, 1);
 	}
 
 }

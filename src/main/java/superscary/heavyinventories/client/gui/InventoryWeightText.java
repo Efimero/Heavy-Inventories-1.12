@@ -8,6 +8,7 @@ import superscary.heavyinventories.common.capability.offsets.IOffset;
 import superscary.heavyinventories.common.capability.offsets.OffsetProvider;
 import superscary.heavyinventories.common.capability.weight.IWeighable;
 import superscary.heavyinventories.common.capability.weight.WeightProvider;
+import superscary.heavyinventories.util.Toolkit;
 
 /**
  * Copyright (c) 2018 by SuperScary(ERBF) http://codesynced.com
@@ -35,11 +36,11 @@ public class InventoryWeightText extends Gui
 
 		if (minecraft.gameSettings.attackIndicator == 1)
 		{
-			minecraft.fontRenderer.drawString("" + weighable.getWeight() + "/" + display + label, scaledResolution.getScaledWidth() / 2 + 97, scaledResolution.getScaledHeight() - 15, Integer.parseInt("FFFFFF", 16), true);
+			minecraft.fontRenderer.drawString("" + Toolkit.roundDouble(weighable.getWeight()) + "/" + display + label, scaledResolution.getScaledWidth() / 2 + 97, scaledResolution.getScaledHeight() - 15, Integer.parseInt("FFFFFF", 16), true);
 		}
 		else if (minecraft.gameSettings.attackIndicator == 2)
 		{
-			minecraft.fontRenderer.drawString("" + weighable.getWeight() + "/" + display + label, scaledResolution.getScaledWidth() / 2 + 97, scaledResolution.getScaledHeight() - 30, Integer.parseInt("FFFFFF", 16), true);
+			minecraft.fontRenderer.drawString("" + Toolkit.roundDouble(weighable.getWeight()) + "/" + display + label, scaledResolution.getScaledWidth() / 2 + 97, scaledResolution.getScaledHeight() - 30, Integer.parseInt("FFFFFF", 16), true);
 		}
 	}
 

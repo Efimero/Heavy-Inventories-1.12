@@ -1,10 +1,13 @@
 package superscary.heavyinventories.calc;
 
+import baubles.api.BaublesApi;
+import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Loader;
 import superscary.heavyinventories.configs.weights.CustomConfigLoader;
 import superscary.heavyinventories.configs.weights.MinecraftConfig;
 import superscary.heavyinventories.util.Toolkit;
@@ -33,7 +36,6 @@ public class PlayerWeightCalculator
 		for (int i = 0; i < player.inventory.getSizeInventory(); i++)
 		{
 			ItemStack stack = player.inventory.getStackInSlot(i);
-			Item item = stack.getItem();
 			if (stack != null)
 			{
 				if (Toolkit.getModNameFromItem(stack.getItem()).equalsIgnoreCase("minecraft"))
@@ -46,7 +48,28 @@ public class PlayerWeightCalculator
 				}
 			}
 		}
+
+		if (Loader.isModLoaded("baubles")) weight += calculateWeightForBaublesInventory(player);
 		return weight;
+	}
+
+	/**
+	 * Only used for calculating the weight for Baubles slots (0-7)
+	 * @param player
+	 */
+	public static double calculateWeightForBaublesInventory(EntityPlayer player)
+	{
+		double weight = 0;
+		IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
+		for (int i = 0; i < 7; i++)
+		{
+			ItemStack stack = handler.getStackInSlot(i);
+			if (handler.getStackInSlot(i) != null)
+			{
+				weight += (getWeight(Toolkit.getModNameFromItem(stack.getItem()), stack.getItem()) * stack.getCount());
+			}
+		}
+		return Toolkit.roundDouble(weight);
 	}
 
 	/**

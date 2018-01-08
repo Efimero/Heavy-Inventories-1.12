@@ -25,7 +25,14 @@ public class CustomConfigLoader
 	 */
 	public static double getItemWeight(String modid, Item item)
 	{
-		return ConfigReader.getConfig(modid + ".cfg").get(Configuration.CATEGORY_GENERAL, item.getRegistryName().toString().split(":")[1], 0.5).getDouble();
+		try
+		{
+			return ConfigReader.getConfig(modid + ".cfg").get(Configuration.CATEGORY_GENERAL, item.getRegistryName().toString().split(":")[1], 0.5).getDouble();
+		}
+		catch (NullPointerException e)
+		{}
+
+		return 0.1;
 	}
 
 }

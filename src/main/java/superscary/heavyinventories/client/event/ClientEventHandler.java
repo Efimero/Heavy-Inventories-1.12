@@ -152,6 +152,7 @@ public class ClientEventHandler
 
 	private boolean encumberedMessage = false;
 	private boolean overEncumberedMessage = false;
+	private double playersCalculatedWeight = -1;
 
 	/**
 	 * Sends message if the player is encumbered
@@ -162,7 +163,12 @@ public class ClientEventHandler
 	{
 		EntityPlayer player = event.player;
 		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
-		weighable.setWeight(PlayerWeightCalculator.calculateWeight(player));
+
+		if (weighable.getWeight() != playersCalculatedWeight)
+		{
+			playersCalculatedWeight = getPlayersCalculatedWeight(player);
+			weighable.setWeight(playersCalculatedWeight);
+		}
 
 		if (weighable.getRelativeWeight() >= 1.0)
 		{
@@ -197,6 +203,11 @@ public class ClientEventHandler
 
 			//HeavyInventories.getNetwork().sendToServer(new PlayerNotEncumberedMessage(true));
 		}
+	}
+
+	public double getPlayersCalculatedWeight(EntityPlayer player)
+	{
+		return PlayerWeightCalculator.calculateWeight(player);
 	}
 
 	/**

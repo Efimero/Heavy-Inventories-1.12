@@ -11,6 +11,7 @@ import superscary.heavyinventories.common.capability.weight.WeightProvider;
 import superscary.heavyinventories.configs.HeavyInventoriesConfig;
 import superscary.heavyinventories.util.EnumTagID;
 import superscary.heavyinventories.util.Logger;
+import superscary.heavyinventories.util.Toolkit;
 
 /**
  * Copyright (c) 2018 by SuperScary(ERBF) http://codesynced.com
@@ -46,6 +47,8 @@ public class PumpingIronHandler
 		{
 			Logger.info("\"HIWeight\" is not part of %s's player data! Adding it now...");
 		}*/
+
+		Toolkit.playSoundAtPlayer(player, 355, 20, 10);
 	}
 
 	@SubscribeEvent

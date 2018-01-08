@@ -3,18 +3,17 @@ package superscary.heavyinventories;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import superscary.heavyinventories.client.command.HeavyInventoriesCommandRegistry;
 import superscary.heavyinventories.common.CommonProxy;
+import superscary.heavyinventories.compat.CompatLoader;
 import superscary.heavyinventories.configs.HeavyInventoriesConfig;
 import superscary.heavyinventories.configs.reader.ConfigReader;
 import superscary.heavyinventories.configs.weights.MinecraftConfig;
 import superscary.heavyinventories.util.Constants;
 import superscary.heavyinventories.util.Logger;
+import superscary.supercore.SuperCore;
 import superscary.supercore.info.Generator;
 
 import java.io.File;
@@ -33,7 +32,7 @@ import static superscary.heavyinventories.util.Constants.*;
  */
 
 @SuppressWarnings("unused")
-@Mod(modid = MODID, version = VERSION, name = NAME, guiFactory = "superscary.heavyinventories.client.gui.ModGuiFactory", acceptedMinecraftVersions = "1.12")
+@Mod(modid = MODID, version = VERSION, name = NAME, guiFactory = "superscary.heavyinventories.client.gui.ModGuiFactory", acceptedMinecraftVersions = "1.12", dependencies = SuperCore.SET_REQUIRED_AFTER)
 public class HeavyInventories
 {
 
@@ -52,11 +51,15 @@ public class HeavyInventories
     {
         Logger.setLogger(event.getModLog());
 
+        Logger.info("PreInit...");
+
         Generator.Info.create(Constants.class, event);
         MinecraftConfig.init(event.getModConfigurationDirectory());
         HeavyInventoriesConfig.init(event.getModConfigurationDirectory());
 
         readerDirectory = event.getModConfigurationDirectory();
+
+        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "superscary.heavyinventories.compat.mods.theoneprobe.HITOPInfoProvider");
 
         proxy.preInit();
     }
@@ -64,14 +67,19 @@ public class HeavyInventories
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
+        Logger.info("Init...");
+
         proxy.init();
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
+        Logger.info("PostInit...");
+
         proxy.postInit();
         ConfigReader.handshake();
+        CompatLoader.build();
     }
 
     @EventHandler

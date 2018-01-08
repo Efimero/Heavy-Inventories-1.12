@@ -1,5 +1,15 @@
 package superscary.heavyinventories.compat;
 
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
+import superscary.heavyinventories.compat.mods.HIBaubles;
+import superscary.heavyinventories.compat.mods.HIJei;
+import superscary.heavyinventories.compat.mods.theoneprobe.HITheOneProbe;
+import superscary.heavyinventories.compat.mods.HIWaila;
+import superscary.heavyinventories.util.Logger;
+
+import java.util.ArrayList;
+
 /**
  * Copyright (c) 2018 by SuperScary(ERBF) http://codesynced.com
  * <p>
@@ -20,20 +30,64 @@ public class CompatLoader
 	 * such as Tinkers' Construct, Applied Energistics 2, and such.
 	 */
 
+	private static ArrayList<String> loadableMods = new ArrayList<>();
+
 	/**
 	 * Will build all compatability files
 	 */
 	public static void build()
 	{
+		Logger.info("Finding compatible mods...");
 
+		for (ModContainer container : Loader.instance().getActiveModList())
+		{
+			String modid = container.getModId();
+			for (EnumCompatMods mods : EnumCompatMods.values())
+			{
+				if (modid.equals(mods.getCompatModid()))
+				{
+					Logger.info("Found %s!", modid);
+					loadableMods.add(modid);
+				}
+			}
+		}
+
+		finish();
 	}
 
 	/**
-	 * Kills this classes methods when already implemented
+	 * Finishes the implementation of the compatability
 	 */
-	public static void finish()
+	protected static void finish()
 	{
+		ArrayList<String> unloaded = new ArrayList<>();
 
+		for (EnumCompatMods mod : EnumCompatMods.values()) unloaded.add(mod.getCompatModid());
+
+		for (String s : loadableMods)
+		{
+			switch (s)
+			{
+				case "baubles": HIBaubles.register();
+								unloaded.remove(s);
+								break;
+				case "jei": new HIJei();
+								unloaded.remove(s);
+								break;
+				case "theoneprobe": new HITheOneProbe();
+								unloaded.remove(s);
+								break;
+				case "waila": new HIWaila();
+								unloaded.remove(s);
+								break;
+				default: break;
+			}
+		}
+
+		for (String s : unloaded)
+		{
+			Logger.info("Disabled compatability for %s", s);
+		}
 	}
 
 }
