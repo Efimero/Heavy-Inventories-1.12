@@ -125,7 +125,7 @@ public class Toolkit
 
 	public static double roundDouble(double value, int places)
 	{
-		if (places == 0) places = 1;
+		if (places == 0) throw new IllegalArgumentException();
 
 		long factor = (long) Math.pow(10, places);
 		value *= factor;

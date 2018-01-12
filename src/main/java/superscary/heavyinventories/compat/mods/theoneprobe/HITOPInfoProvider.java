@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import superscary.heavyinventories.calc.PlayerWeightCalculator;
+import superscary.heavyinventories.util.Toolkit;
 
 import static superscary.heavyinventories.util.Constants.MODID;
 
@@ -36,9 +37,8 @@ public class HITOPInfoProvider implements IProbeInfoProvider
 	@Override
 	public void addProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, IBlockState state, IProbeHitData data)
 	{
-		//IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
 		Block block = state.getBlock();
-		double blockWeight = PlayerWeightCalculator.getWeight(new ItemStack(Item.getItemFromBlock(block)));
+		double blockWeight = Toolkit.roundDouble(PlayerWeightCalculator.getWeight(new ItemStack(Item.getItemFromBlock(block))), 1);
 		info.horizontal().text("" + blockWeight + " stone", info.defaultTextStyle());
 	}
 

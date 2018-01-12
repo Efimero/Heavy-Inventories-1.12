@@ -4,8 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import superscary.heavyinventories.client.event.ClientEventHandler;
-import superscary.heavyinventories.common.capability.offsets.IOffset;
-import superscary.heavyinventories.common.capability.offsets.OffsetProvider;
 import superscary.heavyinventories.common.capability.weight.IWeighable;
 import superscary.heavyinventories.common.capability.weight.WeightProvider;
 import superscary.heavyinventories.util.Toolkit;
@@ -28,19 +26,38 @@ public class InventoryWeightText extends Gui
 	public static void renderText(Minecraft minecraft)
 	{
 		IWeighable weighable = minecraft.player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
-		IOffset offset = minecraft.player.getCapability(OffsetProvider.OFFSET_CAPABILITY, null);
-
-		double display = ClientEventHandler.getPlayerWeight();
-
 		ScaledResolution scaledResolution = new ScaledResolution(minecraft);
+		int attackIndicator = minecraft.gameSettings.attackIndicator;
 
-		if (minecraft.gameSettings.attackIndicator == 1)
+		if (attackIndicator == EnumAttackIndicator.CROSSHAIR.getAttackIndicator())
 		{
-			minecraft.fontRenderer.drawString("" + Toolkit.roundDouble(weighable.getWeight()) + "/" + display + label, scaledResolution.getScaledWidth() / 2 + 97, scaledResolution.getScaledHeight() - 15, Integer.parseInt("FFFFFF", 16), true);
+			renderTextToScreen(minecraft, weighable, scaledResolution, 15, ClientEventHandler.getPlayerWeight());
 		}
-		else if (minecraft.gameSettings.attackIndicator == 2)
+		else if (attackIndicator == EnumAttackIndicator.BAR.getAttackIndicator())
 		{
-			minecraft.fontRenderer.drawString("" + Toolkit.roundDouble(weighable.getWeight()) + "/" + display + label, scaledResolution.getScaledWidth() / 2 + 97, scaledResolution.getScaledHeight() - 30, Integer.parseInt("FFFFFF", 16), true);
+			renderTextToScreen(minecraft, weighable, scaledResolution, 30, ClientEventHandler.getPlayerWeight());
+		}
+	}
+
+	public static void renderTextToScreen(Minecraft minecraft, IWeighable weighable, ScaledResolution scaledResolution, int scaledResolutionOffset, double display)
+	{
+		minecraft.fontRenderer.drawString("" + Toolkit.roundDouble(weighable.getWeight()) + "/" + display + label, scaledResolution.getScaledWidth() / 2 + 97, scaledResolution.getScaledHeight() - scaledResolutionOffset, Integer.parseInt("FFFFFF", 16), true);
+	}
+
+	public enum EnumAttackIndicator
+	{
+		CROSSHAIR(1),
+		BAR(2);
+
+		private int pos;
+		EnumAttackIndicator(int pos)
+		{
+			this.pos = pos;
+		}
+
+		public int getAttackIndicator()
+		{
+			return pos;
 		}
 	}
 

@@ -42,6 +42,8 @@ import superscary.supercore.tools.EnumColor;
  * the case of brief quotations embodied in critical reviews and
  * certain other noncommercial uses permitted by copyright law.
  */
+
+@SuppressWarnings("all")
 public class ClientEventHandler
 {
 
@@ -557,7 +559,6 @@ public class ClientEventHandler
 	public void getPlayerWeightOffset(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event)
 	{
 		EntityPlayer player = event.player;
-		IOffset offset = player.getCapability(OffsetProvider.OFFSET_CAPABILITY, null);
 		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
 
 		if (player.getEntityData().hasKey(EnumTagID.WEIGHT.getId()))
@@ -569,7 +570,7 @@ public class ClientEventHandler
 		else
 		{
 			player.getEntityData().setDouble(EnumTagID.WEIGHT.getId(), HeavyInventoriesConfig.maxCarryWeight);
-			weighable.setMaxWeight(700.0D);
+			weighable.setMaxWeight(HeavyInventoriesConfig.maxCarryWeight);
 		}
 		playerWeight = weighable.getMaxWeight();
 	}

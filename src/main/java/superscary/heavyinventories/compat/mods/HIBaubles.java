@@ -25,9 +25,7 @@ public class HIBaubles
 	private static final String NAME = "Baubles";
 
 	public HIBaubles()
-	{
-
-	}
+	{}
 
 	public static void build()
 	{
