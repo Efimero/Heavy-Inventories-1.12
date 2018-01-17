@@ -12,6 +12,7 @@ hi.splash.noRun=You're carrying to much to run!
 hi.gui.shift=Hold %s for more information.
 hi.gui.weight=Stack Weight:
 hi.gui.maxStackWeight=Max Stack Weight (%s):
+hi.defaultWeight=This weight is the base weight due to a custom one not being provided or could not be read.
 
 # Commands
 hi.command.usage=heavyinventories

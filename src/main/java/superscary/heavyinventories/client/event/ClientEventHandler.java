@@ -80,33 +80,42 @@ public class ClientEventHandler
 						}
 					}
 				}
+				/**
+				 * Custom reader
+				 */
+				else if (ConfigReader.getLoadedMods().contains(Toolkit.getModNameFromItem(stack.getItem()) + ".cfg"))
+				{
+					String modid = Toolkit.getModNameFromItem(stack.getItem());
+
+					double weight = CustomConfigLoader.getItemWeight(modid, stack.getItem());
+					event.getToolTip().add(form(weight));
+					if (stack.getCount() > 1)
+					{
+						event.getToolTip().add(I18n.format("hi.gui.weight") + " " + (weight * stack.getCount()) + " Stone");
+					}
+
+					if (Minecraft.getMinecraft().currentScreen != null)
+					{
+						if (tooltipKeyCheck())
+						{
+							addShiftTip(event, stack, weight);
+						}
+						else
+						{
+							addNoShift(event);
+						}
+					}
+				}
 				else
 				{
-					/**
-					 * Custom reader
-					 */
-					if (ConfigReader.getLoadedMods().contains(Toolkit.getModNameFromItem(stack.getItem()) + ".cfg"))
+					addShiftTip(event, stack, 0.1);
+					if (tooltipKeyCheck())
 					{
-						String modid = Toolkit.getModNameFromItem(stack.getItem());
-
-						double weight = CustomConfigLoader.getItemWeight(modid, stack.getItem());
-						event.getToolTip().add(form(weight));
-						if (stack.getCount() > 1)
-						{
-							event.getToolTip().add(I18n.format("hi.gui.weight") + " " + (weight * stack.getCount()) + " Stone");
-						}
-
-						if (Minecraft.getMinecraft().currentScreen != null)
-						{
-							if (tooltipKeyCheck())
-							{
-								addShiftTip(event, stack, weight);
-							}
-							else
-							{
-								addNoShift(event);
-							}
-						}
+						addTextToTooltip(event, I18n.format("hi.defaultWeight"));
+					}
+					else
+					{
+						addNoShift(event);
 					}
 				}
 			}
@@ -131,6 +140,16 @@ public class ClientEventHandler
 	private void addNoShift(ItemTooltipEvent event)
 	{
 		event.getToolTip().add(I18n.format("hi.gui.shift", EnumColor.YELLOW + "SHIFT" + EnumColor.GREY));
+	}
+
+	/**
+	 * Adds text to an item tooltip (for convenience)
+	 * @param event
+	 * @param message
+	 */
+	private void addTextToTooltip(ItemTooltipEvent event, String message)
+	{
+		event.getToolTip().add(message);
 	}
 
 	/**

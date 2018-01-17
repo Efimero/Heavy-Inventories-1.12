@@ -27,7 +27,7 @@ public class CustomConfigLoader
 	{
 		try
 		{
-			return ConfigReader.getConfig(modid + ".cfg").get(Configuration.CATEGORY_GENERAL, item.getRegistryName().toString().split(":")[1], 0.5).getDouble();
+			return ConfigReader.getConfig(modid + ".cfg").get(Configuration.CATEGORY_GENERAL, item.getRegistryName().toString().split(":")[1], 0.1).getDouble();
 		}
 		catch (NullPointerException e)
 		{}
