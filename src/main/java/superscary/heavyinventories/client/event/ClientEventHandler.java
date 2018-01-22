@@ -177,6 +177,7 @@ public class ClientEventHandler
 
 	/**
 	 * Sends message if the player is encumbered
+	 * TODO: DOESN'T WORK. DUPLICATES MESSAGES
 	 * @param event
 	 */
 	@SubscribeEvent
@@ -467,46 +468,6 @@ public class ClientEventHandler
 				}
 			}
 		}
-	}
-
-	/**
-	 * Stops players from teleporting to different dimensions when over encumbered
-	 * TODO: Does not function correctly. Creates block errors in other dimensions.
-	 * @param event
-	 */
-	@SubscribeEvent
-	public void portalTeleport(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent event)
-	{
-		EntityPlayer player = event.player;
-		IWeighable weighable = player.getCapability(WeightProvider.WEIGHABLE_CAPABILITY, null);
-		IOffset offset = player.getCapability(OffsetProvider.OFFSET_CAPABILITY, null);
-
-		if (weighable.isEncumbered() || weighable.isOverEncumbered())
-		{
-			if (HeavyInventoriesConfig.canTeleport)
-			{
-				if (!HeavyInventoriesConfig.canTeleportToNether)
-				{
-					if (event.toDim == -1)
-					{
-						player.changeDimension(event.fromDim);
-					}
-				}
-
-				if (!HeavyInventoriesConfig.canTeleportToEnd)
-				{
-					if (event.toDim == 1)
-					{
-						player.changeDimension(event.fromDim);
-					}
-				}
-			}
-			else
-			{
-				player.dimension = event.fromDim;
-			}
-		}
-
 	}
 
 	// TODO FIX: Creates loop on use of potion / doesn't affect max weight
