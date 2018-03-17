@@ -8,10 +8,27 @@ Heavy Inventories is a mod which creates a realistic and configurable weight sys
 ## Support
 
 #### 1.12.2 ![](https://img.shields.io/badge/Status-Fully%20supported-green.svg)
+
+1.12.2 is the most current minecraft version to be supported and will be the only version receiving updates at this time.
+
+***
+
 ### 1.12 ![](https://img.shields.io/badge/Status-Fully%20supported-green.svg)
+
+***
+
 ### 1.11.2 ![](https://img.shields.io/badge/Status-Partially%20Supported-red.svg)
+
+***
+
 ### 1.10.2 ![](https://img.shields.io/badge/Status-Not%20Supported-red.svg)
+
+***
+
 ### 1.10 ![](https://img.shields.io/badge/Status-Not%20Supported-red.svg)
+
+***
+
 ### 1.9 ![](https://img.shields.io/badge/Status-Partially%20Supported-red.svg)
 
 ## Help
