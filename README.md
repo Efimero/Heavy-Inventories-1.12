@@ -32,4 +32,4 @@ Heavy Inventories is a mod which creates a realistic and configurable weight sys
 ### 1.9 ![](https://img.shields.io/badge/Status-Partially%20Supported-red.svg)
 
 ## Help
-Have an idea or bug report? Post it in the issue tracker. Only issues posted on the Github issue tracker will be responded reviewed.
+Have an idea or bug report? Post it in the issue tracker. Only issues posted on the Github issue tracker will be reviewed.
