@@ -3,7 +3,7 @@
 
 Heavy Inventories is a mod which creates a realistic and configurable weight system to Minecraft.
 
-##Requires SuperCore (http://cf.way2muchnoise.eu/full_supercore_downloads.svg)  ![Available](http://cf.way2muchnoise.eu/versions/supercore.svg)](https://minecraft.curseforge.com/projects/supercore)
+## Requires SuperCore (http://cf.way2muchnoise.eu/full_supercore_downloads.svg)  ![Available](http://cf.way2muchnoise.eu/versions/supercore.svg)](https://minecraft.curseforge.com/projects/supercore)
 
 ## Support
 
