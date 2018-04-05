@@ -46,20 +46,26 @@ public class MinecraftConfig
 	{
 		config.load();
 
-		List<Item> itemList = ImmutableList.copyOf(Item.REGISTRY);
-		for (Item item : itemList)
+		//List<Item> itemList = ImmutableList.copyOf(Item.REGISTRY);
+		for (Item item : Item.REGISTRY)
 		{
-			config.getFloat(item.getUnlocalizedName().substring(5), GENERAL, generateWeight(item), 0, 16,
-					"Sets the carry weight of item " + item.getUnlocalizedName().substring(5, item.getUnlocalizedName()
-																								  .length()));
+      if (item.getRegistryName().getResourceDomain() == "minecraft") {
+		    config.getFloat(
+          item.getRegistryName().getResourcePath(),
+          GENERAL, generateWeight(item), 0, 16,
+          "Sets the carry weight of item " + item.getRegistryName().getResourcePath());
+      }
 		}
 
-		List<Block> blockList = ImmutableList.copyOf(Block.REGISTRY);
-		for (Block block : blockList)
+		//List<Block> blockList = ImmutableList.copyOf(Block.REGISTRY);
+		for (Block block : Block.REGISTRY)
 		{
-			config.getFloat(block.getUnlocalizedName().substring(5, block.getUnlocalizedName().length()), GENERAL,
-					generateWeight(block), 0, 16, "Sets the carry weight of block " + block.getUnlocalizedName()
-																						   .substring(5, block.getUnlocalizedName().length()));
+      if (block.getRegistryName().getResourceDomain() == "minecraft") {
+        config.getFloat(
+          block.getRegistryName().getResourcePath(),
+          GENERAL, generateWeight(block), 0, 16,
+          "Sets the carry weight of block " + block.getRegistryName().getResourcePath());
+      }
 		}
 
 		config.save();

@@ -38,13 +38,13 @@ public class PlayerWeightCalculator
 			ItemStack stack = player.inventory.getStackInSlot(i);
 			if (stack != null)
 			{
-				if (Toolkit.getModNameFromItem(stack.getItem()).equalsIgnoreCase("minecraft"))
+				if (stack.getItem().getRegistryName().getResourceDomain() == "minecraft")
 				{
 					weight += (getWeight(stack) * stack.getCount());
 				}
 				else
 				{
-					weight += (getWeight(Toolkit.getModNameFromItem(stack.getItem()), stack.getItem()) * stack.getCount());
+					weight += (getWeight(stack.getItem().getRegistryName().getResourceDomain(), stack.getItem()) * stack.getCount());
 				}
 			}
 		}
@@ -66,7 +66,7 @@ public class PlayerWeightCalculator
 			ItemStack stack = handler.getStackInSlot(i);
 			if (handler.getStackInSlot(i) != null)
 			{
-				weight += (getWeight(Toolkit.getModNameFromItem(stack.getItem()), stack.getItem()) * stack.getCount());
+				weight += (getWeight(stack.getItem().getRegistryName().getResourceDomain(), stack.getItem()) * stack.getCount());
 			}
 		}
 		return Toolkit.roundDouble(weight);
@@ -79,7 +79,7 @@ public class PlayerWeightCalculator
 	 */
 	public static double getWeight(ItemStack stack)
 	{
-		return MinecraftConfig.getConfig().get(Configuration.CATEGORY_GENERAL, stack.getItem().getUnlocalizedName().substring(5), 0.5).getDouble();
+		return MinecraftConfig.getConfig().get(Configuration.CATEGORY_GENERAL, stack.getItem().getRegistryName().getResourcePath(), 0.5).getDouble();
 	}
 
 	/**

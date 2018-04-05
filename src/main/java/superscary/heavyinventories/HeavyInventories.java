@@ -54,8 +54,6 @@ public class HeavyInventories
         Logger.info("PreInit...");
 
         Generator.Info.create(Constants.class, event);
-        MinecraftConfig.init(event.getModConfigurationDirectory());
-        HeavyInventoriesConfig.init(event.getModConfigurationDirectory());
 
         readerDirectory = event.getModConfigurationDirectory();
 
@@ -68,6 +66,9 @@ public class HeavyInventories
     public void init(FMLInitializationEvent event)
     {
         Logger.info("Init...");
+
+        HeavyInventoriesConfig.init(readerDirectory);
+        MinecraftConfig.init(readerDirectory);
 
         proxy.init();
     }

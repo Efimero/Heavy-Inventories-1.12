@@ -59,7 +59,7 @@ public class ClientEventHandler
 			ItemStack stack = event.getItemStack();
 			if (stack != null)
 			{
-				if (stack.getItem().getRegistryName().toString().split(":")[0].equalsIgnoreCase("minecraft"))
+				if (stack.getItem().getRegistryName().getResourceDomain() == "minecraft")
 				{
 					double weight = PlayerWeightCalculator.getWeight(stack);
 					event.getToolTip().add(form(weight));
@@ -83,9 +83,9 @@ public class ClientEventHandler
 				/**
 				 * Custom reader
 				 */
-				else if (ConfigReader.getLoadedMods().contains(Toolkit.getModNameFromItem(stack.getItem()) + ".cfg"))
+				else if (ConfigReader.getLoadedMods().contains(stack.getItem().getRegistryName().getResourceDomain() + ".cfg"))
 				{
-					String modid = Toolkit.getModNameFromItem(stack.getItem());
+					String modid = stack.getItem().getRegistryName().getResourceDomain();
 
 					double weight = CustomConfigLoader.getItemWeight(modid, stack.getItem());
 					event.getToolTip().add(form(weight));

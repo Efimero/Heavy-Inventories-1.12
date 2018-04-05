@@ -43,7 +43,7 @@ public class Toolkit
 
 	public static String getModNameFromBlock(Block block)
 	{
-		String find = block.getRegistryName().toString().split(":")[0];
+		String find = block.getRegistryName().getResourceDomain();
 		for (ModContainer mod : Loader.instance().getModList())
 		{
 			if (mod.getModId().equalsIgnoreCase(find))
@@ -56,7 +56,7 @@ public class Toolkit
 
 	public static String getModNameFromItem(Item item)
 	{
-		String find = item.getRegistryName().toString().split(":")[0];
+		String find = item.getRegistryName().getResourceDomain();
 		for (ModContainer mod : Loader.instance().getModList())
 		{
 			if (mod.getModId().equalsIgnoreCase(find))
