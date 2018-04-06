@@ -49,7 +49,7 @@ public class MinecraftConfig
 		//List<Item> itemList = ImmutableList.copyOf(Item.REGISTRY);
 		for (Item item : Item.REGISTRY)
 		{
-      if (item.getRegistryName().getResourceDomain() == "minecraft") {
+      if (item.getRegistryName().getResourceDomain().equals("minecraft")) {
 		    config.getFloat(
           item.getRegistryName().getResourcePath(),
           GENERAL, generateWeight(item), 0, 16,
@@ -60,7 +60,7 @@ public class MinecraftConfig
 		//List<Block> blockList = ImmutableList.copyOf(Block.REGISTRY);
 		for (Block block : Block.REGISTRY)
 		{
-      if (block.getRegistryName().getResourceDomain() == "minecraft") {
+      if (block.getRegistryName().getResourceDomain().equals("minecraft")) {
         config.getFloat(
           block.getRegistryName().getResourcePath(),
           GENERAL, generateWeight(block), 0, 16,

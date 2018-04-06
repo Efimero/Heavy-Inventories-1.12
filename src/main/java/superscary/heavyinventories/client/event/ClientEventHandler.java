@@ -59,7 +59,7 @@ public class ClientEventHandler
 			ItemStack stack = event.getItemStack();
 			if (stack != null)
 			{
-				if (stack.getItem().getRegistryName().getResourceDomain() == "minecraft")
+				if (stack.getItem().getRegistryName().getResourceDomain().equals("minecraft"))
 				{
 					double weight = PlayerWeightCalculator.getWeight(stack);
 					event.getToolTip().add(form(weight));

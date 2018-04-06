@@ -38,7 +38,7 @@ public class PlayerWeightCalculator
 			ItemStack stack = player.inventory.getStackInSlot(i);
 			if (stack != null)
 			{
-				if (stack.getItem().getRegistryName().getResourceDomain() == "minecraft")
+				if (stack.getItem().getRegistryName().getResourceDomain().equals("minecraft"))
 				{
 					weight += (getWeight(stack) * stack.getCount());
 				}
